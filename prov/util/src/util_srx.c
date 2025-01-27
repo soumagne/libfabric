@@ -915,6 +915,10 @@ static int util_cancel_entry(struct util_srx_ctx *srx, uint64_t flags,
 
 	err_entry.op_context = rx_entry->peer_entry.context;
 	err_entry.flags = flags;
+	if (rx_entry->peer_entry.flags & FI_MULTI_RECV) {
+		assert(rx_entry->multi_recv_ref == 0);
+		err_entry.flags |= FI_MULTI_RECV;
+	}
 	err_entry.tag = rx_entry->peer_entry.tag;
 	err_entry.err = FI_ECANCELED;
 	err_entry.prov_errno = -FI_ECANCELED;
